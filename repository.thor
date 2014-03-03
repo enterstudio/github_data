@@ -21,17 +21,12 @@ class Repository < Thor
       account.repos.all
     end
 
-    #rename/split in two
-    def ruby_rails_versions(account, repos)
-      repos.each do |repo|
-        gemfile = retrieve_gemfile(account, repo)
-        gemfile.nil? ? next : gemfile = Base64.decode64(gemfile)
-
-        if has_rails?(gemfile)
-          rails_version = rails_v_from_gemfile(gemfile)
-          ruby_version = ruby_v_from_version_files(account, repo)
-          print_versions(repo.name, ruby_version, rails_version)
-        end
+    def ruby_rails_versions(account, repo)
+      gemfile = process_gemfile(account, repo)
+      if !gemfile.nil? && has_rails?(gemfile)
+        rails_version = rails_v_from_gemfile(gemfile)
+        ruby_version = ruby_v_from_version_files(account, repo)
+        print_versions(repo.name, ruby_version, rails_version)
       end
     end
 
@@ -43,6 +38,11 @@ class Repository < Thor
       else
         file.content
       end
+    end
+
+    def process_gemfile(account, repo)
+      gemfile = retrieve_gemfile(account, repo)
+      gemfile.nil? ? nil : gemfile = Base64.decode64(gemfile)
     end
 
     def has_rails?(file_contents)
