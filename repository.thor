@@ -46,16 +46,15 @@ class Repository < Thor
     end
 
     def has_rails?(file_contents)
-      # /^gem 'rails'/, /^gem "rails"/
       file_contents.include?('gem "rails"') || file_contents.include?("gem 'rails'")
     end
 
     def rails_v_from_gemfile(file_contents)
-      # (/^gem 'rails'.*/)
       index = file_contents.index("gem \"rails\"") || file_contents.index("gem 'rails'")
-      #unless line starts with #
+      #unless line starts with # might solve problem with launchpad comment
       rails_version = file_contents.slice(index + 12, 12)
-      rails_version.slice!(/'.*'/) || rails_version.slice!(/".*"/) || 'Error'
+      rails_version = rails_version.slice!(/'.*'/) || rails_version.slice!(/".*"/) || 'Error'
+      remove_quotes(rails_version)
     end
 
     def ruby_v_from_version_files(account, repo)
@@ -93,6 +92,10 @@ class Repository < Thor
       else
         file.content
       end
+    end
+
+    def remove_quotes(string)
+      quoteless_string = string.gsub('"', '').gsub("'", "")
     end
 
     def print_versions(name, ruby_version, rails_version)
