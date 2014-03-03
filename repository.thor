@@ -23,9 +23,10 @@ class Repository < Thor
 
     def ruby_rails_versions(account, repo)
       gemfile = process_gemfile(account, repo)
+
       if !gemfile.nil? && has_rails?(gemfile)
-        rails_version = rails_v_from_gemfile(gemfile)
-        ruby_version = ruby_v_from_version_files(account, repo)
+        rails_version = rails_version_from_gemfile(gemfile)
+        ruby_version = ruby_version_from_version_files(account, repo)
         print_versions(repo.name, ruby_version, rails_version)
       end
     end
@@ -49,15 +50,15 @@ class Repository < Thor
       file_contents.include?('gem "rails"') || file_contents.include?("gem 'rails'")
     end
 
-    def rails_v_from_gemfile(file_contents)
-      index = file_contents.index("gem \"rails\"") || file_contents.index("gem 'rails'")
-      #unless line starts with # might solve problem with launchpad comment
-      rails_version = file_contents.slice(index + 12, 12)
-      rails_version = rails_version.slice!(/'.*'/) || rails_version.slice!(/".*"/) || 'Error'
+    def rails_version_from_gemfile(file_contents)
+      rails_version_regex = /gem\s('|")rails('|"),(?<rails_version>\s('.*'|".*"))/
+      match = file_contents.match rails_version_regex
+      rails_version = match[:rails_version] || 'Error'
       remove_quotes(rails_version)
     end
 
-    def ruby_v_from_version_files(account, repo)
+    def ruby_version_from_version_files(account, repo)
+      #refactor
       file_content = rbenv_version_file(account, repo) ||
                      ruby_version_file(account, repo) ||
                      other_version_file(account, repo)
