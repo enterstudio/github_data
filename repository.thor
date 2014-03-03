@@ -3,13 +3,13 @@ require 'pry'
 require 'base64'
 
 class Repository < Thor
-  desc "stats USERNAME PASSWORD", "Stats on the Github repos of the authenticated user"
+  desc "ruby_rails_data USERNAME PASSWORD", "Stats on the Github repos of the authenticated user"
 
-  def stats(username, password)
+  def ruby_rails_data(username, password)
     puts "I'm info on #{username}'s' Github repositories"
     account = login(username, password)
-    repos = get_repos(account)
-    ruby_rails_versions(account, repos)
+    repos = get_repos_metadata(account)
+    repos.each { |repo| ruby_rails_versions(account, repo) }
   end
 
   private
@@ -17,7 +17,7 @@ class Repository < Thor
       Github.new(login: username, password: password, auto_pagination: true)
     end
 
-    def get_repos(account)
+    def get_repos_metadata(account)
       account.repos.all
     end
 
