@@ -1,29 +1,21 @@
-# VersionStats
+# GithubData
 
-TODO: Write a gem description
+Thor command line app for obtaining information on your repositories from the Github API.
+    Presently only support the listing of Rails/Ruby version numbers from your Rails repositories.
 
-## Installation
+h3: Installation
 
-Add this line to your application's Gemfile:
+On your development machine, run the following:
 
-    gem 'version_stats'
+    @git clone git@github.com:planetargon/github_data.git
 
 And then execute:
 
-    $ bundle
+    $ bundle install --path vendor
 
-Or install it yourself as:
+h3: Usage
 
-    $ gem install version_stats
+From the command line, run:
 
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it ( http://github.com/<my-github-username>/version_stats/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+    @thor repository:ruby_rails_data "username" "password",
+    replacing "username" and "password" with your Github username and password.
