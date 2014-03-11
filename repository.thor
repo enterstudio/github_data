@@ -18,6 +18,25 @@ class Repository < Thor
       get_authentication_preference(username, password)
     end
 
+    def get_authentication_preference(username, password)
+      say "\nWould you like to use..."
+      choices = ["Basic Authentication"]
+      choices = choices.map.with_index{ |a, i| [i+1, *a]}
+      print_table choices
+      choice = ask("Pick one:").to_i
+      case choice
+      when 1
+        basic_authentication(username, password)
+      else
+        say '\nInvalid entry, try again'
+        get_authentication_preference(username, password)
+      end
+    end
+
+    def basic_authentication(username, password)
+      account = Github.new(login: username, password: password, auto_pagination: true)
+    end
+
     def get_repos_metadata(account)
       account.repos.all
     end
