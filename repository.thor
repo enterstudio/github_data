@@ -3,7 +3,7 @@ require 'pry'
 require 'base64'
 
 class Repository < Thor
-  desc "ruby_rails_data USERNAME PASSWORD", "Stats on the Github repos of the authenticated user"
+  desc "ruby_rails_data", "Ruby/Rails version info on the provided user's Github repos"
 
   def ruby_rails_data(username, password)
     puts "I'm info on #{username}'s' Github repositories"
