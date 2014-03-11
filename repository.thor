@@ -86,11 +86,14 @@ class Repository < Thor
     end
 
     def ruby_version_from_version_files(account, repo)
-      #refactor
-      file_content = rbenv_version_file(account, repo) ||
-                     ruby_version_file(account, repo) ||
-                     other_version_file(account, repo)
+      file_content = find_ruby_version_file(account, repo)
       file_content.nil? ? 'No ruby version file found' : Base64.decode64(file_content)
+    end
+
+    def find_ruby_version_file(account, repo)
+      rbenv_version_file(account, repo) ||
+      ruby_version_file(account, repo) ||
+      other_version_file(account, repo)
     end
 
     def rbenv_version_file(account, repo)
