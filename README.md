@@ -17,8 +17,6 @@ And then execute:
 Usage
 -----------
 
-From the command line, run the following, replacing "username" and "password" with your Github username and password:
+From the command line, run the following, which will prompt you for your Github username and password:
 
-    $ thor repository:ruby_rails_data "username" "password"
-
-
+    $ thor repository:ruby_rails_data
