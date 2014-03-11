@@ -49,8 +49,8 @@ class Repository < Thor
       gemfile.nil? ? nil : gemfile = Base64.decode64(gemfile)
     end
 
-    def has_rails?(file_contents)
-      file_contents.include?('gem "rails"') || file_contents.include?("gem 'rails'")
+    def has_rails_gem?(file_contents)
+      file_contents.match /gem\s('|")rails('|")/
     end
 
     def rails_version_from_gemfile(file_contents)
