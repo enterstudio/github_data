@@ -26,7 +26,7 @@ class Repository < Thor
       if rails_repository?(gemfile)
         rails_version = rails_version_from_gemfile(gemfile)
         ruby_version = ruby_version_from_version_files(account, repo)
-        print_versions(repo.name, ruby_version, rails_version)
+        print_versions(repo.full_name, ruby_version, rails_version)
       end
     end
 
