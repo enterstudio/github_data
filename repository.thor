@@ -23,12 +23,15 @@ class Repository < Thor
 
     def ruby_rails_versions(account, repo)
       gemfile = process_gemfile(account, repo)
-
-      if !gemfile.nil? && has_rails?(gemfile)
+      if rails_repository?(gemfile)
         rails_version = rails_version_from_gemfile(gemfile)
         ruby_version = ruby_version_from_version_files(account, repo)
         print_versions(repo.name, ruby_version, rails_version)
       end
+    end
+
+    def rails_repository?(gemfile)
+      !gemfile.nil? && has_rails_gem?(gemfile)
     end
 
     def retrieve_gemfile(account, repo)
