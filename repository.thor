@@ -5,16 +5,17 @@ require 'base64'
 class Repository < Thor
   desc "ruby_rails_data", "Ruby/Rails version info on the provided user's Github repos"
 
-  def ruby_rails_data(username, password)
-    puts "I'm info on #{username}'s' Github repositories"
-    account = login(username, password)
+  def ruby_rails_data
+    account = request_credentials
     repos = get_repos_metadata(account)
     repos.each { |repo| ruby_rails_versions(account, repo) }
   end
 
   private
-    def login(username, password)
-      Github.new(login: username, password: password, auto_pagination: true)
+    def request_credentials
+      username = ask("Github username:")
+      password = ask("Github password:", :echo => false)
+      get_authentication_preference(username, password)
     end
 
     def get_repos_metadata(account)
