@@ -38,7 +38,12 @@ class Repository < Thor
     end
 
     def get_repos_metadata(account)
-      account.repos.all
+      begin
+        account.repos.all
+      rescue Github::Error::Unauthorized
+        say "\nAuthentication Failed."
+        ruby_rails_data
+      end
     end
 
     def ruby_rails_versions(account, repo)
