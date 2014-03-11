@@ -100,9 +100,8 @@ class Repository < Thor
     end
 
     def print_versions(name, ruby_version, rails_version)
-      puts name
-      puts "Ruby version: " + ruby_version
-      puts "Rails version: " + rails_version
-      puts "\n"
+      say "\n#{name}"
+      say "Ruby version: #{ruby_version}"
+      say "Rails version: #{rails_version}\n"
     end
 end
