@@ -60,10 +60,10 @@ class Repository < Thor
         account.repos.all
       rescue Github::Error::Unauthorized
         say "\nAuthentication Failed."
-        github_ruby_rails_data
+        ruby_rails_data
       rescue BitBucket::Error::Unauthorized
         say "\nAuthentication Failed"
-        bitbucket_ruby_rails_data
+        ruby_rails_data
       end
     end
 
