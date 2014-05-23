@@ -113,53 +113,23 @@ class Repository < Thor
     end
 
     def ruby_version_from_version_files(account, repo)
-      file_content = find_ruby_version_file(account, repo)
-      if @service.eql?('Github')
-        file_content = Base64.decode64(file_content)
-      end
-      file_content.nil? ? 'No ruby version file found' : file_content
+      version_file_content = find_ruby_version_file(account, repo)
+      return 'No ruby version file found' if version_file_content.nil?
+      @service.eql?('Github') ? Base64.decode64(version_file_content) : version_file_content
     end
 
     def find_ruby_version_file(account, repo)
-      rbenv_version_file(account, repo) ||
-      ruby_version_file(account, repo) ||
-      other_version_file(account, repo)
+      version_file_content('.rbenv-version', account, repo) ||
+      version_file_content('.ruby-version', account, repo) ||
+      version_file_content('VERSION', account, repo)
     end
 
-    def rbenv_version_file(account, repo)
+    def version_file_content(filename, account, repo)
       begin
         if @service.eql?('Github')
-          file = account.repos.contents.get(account.login, repo.name, '.rbenv-version').content
+            file = account.repos.contents.get(account.login, repo.name, filename).content
         elsif @service.eql?('BitBucket')
-          file = account.repos.sources.find(account.login, repo.name, 'master', '.rbenv-version').data
-        end
-      rescue
-        nil
-      else
-        file
-      end
-    end
-
-    def ruby_version_file(account, repo)
-      begin
-        if @service.eql?('Github')
-          file = account.repos.contents.get(account.login, repo.name, '.ruby-version').content
-        elsif @service.eql?('BitBucket')
-          file = account.repos.sources.find(account.login, repo.name, 'master', '.ruby-version').data
-        end
-      rescue
-        nil
-      else
-        file
-      end
-    end
-
-    def other_version_file(account, repo)
-      begin
-        if @service.eql?('Github')
-          file = account.repos.contents.get(account.login, repo.name, 'VERSION').content
-        elsif @service.eql?('BitBucket')
-          file = account.repos.sources.find(account.login, repo.name, 'master', 'VERSION').data
+          file = account.repos.sources.find(account.login, repo.name, 'master', filename).data
         end
       rescue
         nil
