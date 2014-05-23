@@ -70,7 +70,7 @@ class Repository < Thor
     def ruby_rails_versions(account, repo)
       gemfile = retrieve_gemfile(account, repo)
       if @service.eql?('Github')
-        gemfile = process_gemfile(account, repo)
+        gemfile = process_gemfile(gemfile)
       end
       if rails_repository?(gemfile)
         rails_version = rails_version_from_gemfile(gemfile)
@@ -97,7 +97,7 @@ class Repository < Thor
       end
     end
 
-    def process_gemfile(account, repo)
+    def process_gemfile(gemfile)
       gemfile.nil? ? nil : gemfile = Base64.decode64(gemfile)
     end
 
